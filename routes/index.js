@@ -3,12 +3,12 @@ var router = express.Router();
 
 const { check, validationResult } = require('express-validator');
 
+let todoList = [];
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Express', todos: todoList });
 });
-
-let todoList = [];
 
 router.post('/',
     [

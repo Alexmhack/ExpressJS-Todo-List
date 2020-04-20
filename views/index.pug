@@ -1,0 +1,34 @@
+extends layout
+
+block content
+
+  if errors
+    ul
+      for error in errors
+        li= error.msg
+
+  -data = data || {}
+
+  if message
+    p
+      message
+
+  form(action="." method="POST")
+    label(for="todo") Todo:
+    input(
+      type="text"
+      id="todo"
+      name="todo"
+      value=data.todo
+    )
+
+    input(type="submit" value="Submit")
+
+    if todos
+      ul
+        for todo in todos
+          li
+            = todo
+            button(formaction=`/remove/${todo}` class="btn") Remove
+    else
+      p No todos exists

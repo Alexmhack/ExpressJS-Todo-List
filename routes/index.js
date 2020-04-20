@@ -29,7 +29,8 @@ router.post('/',
             res.render('index', {
                 title: 'Add Todo',
                 errors: errors.array(),
-                data: req.body
+                data: req.body,
+                todos: todoList
             });
         }
 

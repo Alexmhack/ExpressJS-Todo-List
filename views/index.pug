@@ -24,7 +24,7 @@ block content
 
     input(type="submit" value="Submit")
 
-    if todos.length > 0
+    if todos && todos.length > 0
       ul
         for todo in todos
           li

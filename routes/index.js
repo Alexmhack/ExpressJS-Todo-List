@@ -11,12 +11,18 @@ let todoList = [];
 router.get('/', function(req, res, next) {
     Todo.find()
         .then(todos => {
-            res.render('index', { title: 'Express', todos });
+            res.render('index', { title: 'List Todos', todos });
         })
         .catch(() => console.log('CANNOT FETCH TODOS FROM DB'));
 });
 
-router.post('/',
+router.get('/add-todo', function(req, res, next) {
+    res.render('add', {
+        title: 'New Todo'
+    });
+});
+
+router.post('/add-todo',
     [
         check('title')
             .isLength({ min: 1 })
@@ -28,10 +34,6 @@ router.post('/',
     function(req, res, next) {
         const errors = validationResult(req);
 
-        Todo.find()
-            .then(todos => todoList = todos)
-            .catch(() => console.log('CANNOT FETCH TODOS FROM DB'));
-
         if (errors.isEmpty()) {
             console.log(req.body);
             // todoList.push(req.body.todo);
@@ -39,7 +41,7 @@ router.post('/',
             const todo = new Todo(req.body);
             todo.save()
                 .then(() => {
-                    res.render('index', { title: 'Add Todo', todos: todoList, message: 'Todo added' })
+                    res.redirect('/')
                 })
                 .catch(err => {
                     console.log(err);
@@ -47,15 +49,13 @@ router.post('/',
                         title: 'Add Todo',
                         errors: err,
                         data: req.body,
-                        todos: todoList
                     });
                 })
         } else {
-            res.render('index', {
+            res.render('add', {
                 title: 'Add Todo',
                 errors: errors.array(),
                 data: req.body,
-                todos
             });
         }
 
@@ -64,11 +64,10 @@ router.post('/',
     }
 );
 
-router.post('/remove/:todo', function(req, res) {
-    console.log(todoList);
-    todoList.splice(todoList.indexOf(req.params.todo), 1);
-    console.log(todoList);
-    res.redirect('/')
+router.post('/remove/:id', function(req, res) {
+    // todoList.splice(todoList.indexOf(req.params.id), 1);
+    Todo.deleteOne({ _id: req.params.id }, function (err) {})
+        .then(() => res.redirect('/'));
 })
 
 module.exports = router;

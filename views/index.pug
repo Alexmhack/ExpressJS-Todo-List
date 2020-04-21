@@ -2,42 +2,17 @@ extends layout
 
 block content
 
-  if errors
-    ul
-      for error in errors
-        li= error.msg
-
-  -data = data || {}
-
-  if message
-    p
-      message
+  a(href="/add-todo") New
 
   form(action="." method="POST")
-    label(for="title") Todo:
-    input(
-      type="text"
-      id="title"
-      name="title"
-      value=data.title
-    )
-
-    label(for="description") Description:
-    input(
-      type="text"
-      id="description"
-      name="description"
-      value=data.description
-    )
-
-    input(type="submit" value="Submit")
-
     if todos && todos.length > 0
       ul
         for todo in todos
           li
             h3= todo.title
             p= todo.description
+            p
+              small= todo.date.toISOString().replace('T', ' ').replace(/\..+/, '')
             button(formaction=`/remove/${todo._id}` class="btn") Remove
     else
       p No todos exists

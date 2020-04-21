@@ -14,12 +14,20 @@ block content
       message
 
   form(action="." method="POST")
-    label(for="todo") Todo:
+    label(for="title") Todo:
     input(
       type="text"
-      id="todo"
-      name="todo"
-      value=data.todo
+      id="title"
+      name="title"
+      value=data.title
+    )
+
+    label(for="description") Description:
+    input(
+      type="text"
+      id="description"
+      name="description"
+      value=data.description
     )
 
     input(type="submit" value="Submit")
@@ -28,7 +36,8 @@ block content
       ul
         for todo in todos
           li
-            = todo
-            button(formaction=`/remove/${todo}` class="btn") Remove
+            h3= todo.title
+            p= todo.description
+            button(formaction=`/remove/${todo._id}` class="btn") Remove
     else
       p No todos exists

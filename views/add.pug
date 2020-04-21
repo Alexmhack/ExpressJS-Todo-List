@@ -1,0 +1,36 @@
+extends layout
+
+block content
+
+  p
+    a(href="/" class="all-todos") All todos
+
+  if errors
+    ul
+      for error in errors
+        li= error.msg
+
+  -data = data || {}
+
+  if message
+    p
+      message
+
+  form(action="/add-todo" method="POST")
+    label(for="title") Todo:
+    input(
+      type="text"
+      id="title"
+      name="title"
+      value=data.title
+    )
+
+    label(for="description") Description:
+    input(
+      type="text"
+      id="description"
+      name="description"
+      value=data.description
+    )
+
+    input(type="submit" value="Submit")

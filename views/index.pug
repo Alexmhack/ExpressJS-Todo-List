@@ -2,17 +2,20 @@ extends layout
 
 block content
 
-  a(href="/add-todo") New
+  a(href="/add-todo" class="btn btn-success mb-4") Add New
+    i.fa.fa-long-arrow-right.ml-2
 
   form(action="." method="POST")
     if todos && todos.length > 0
-      ul
-        for todo in todos
-          li
+      for todo in todos
+        div.card.mb-4
+          div.card-body
             h3= todo.title
             p= todo.description
             p
+              i.fa.fa-clock-o.fa-sm.mr-2
               small= todo.date.toISOString().replace('T', ' ').replace(/\..+/, '')
-            button(formaction=`/remove/${todo._id}` class="btn") Remove
+            button(formaction=`/remove/${todo._id}` class="btn btn-danger") Remove
+              i.fa.fa-trash-o.fa.ml-2
     else
       p No todos exists

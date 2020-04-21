@@ -3,7 +3,7 @@ extends layout
 block content
 
   p
-    a(href="/" class="all-todos") All todos
+    a(href="/" class="btn btn-primary") All todos
 
   if errors
     ul
@@ -17,20 +17,25 @@ block content
       message
 
   form(action="/add-todo" method="POST")
-    label(for="title") Todo:
-    input(
-      type="text"
-      id="title"
-      name="title"
-      value=data.title
-    )
+    div.form-group
+      label(for="title") Todo:
+      input(
+        type="text"
+        id="title"
+        name="title"
+        value=data.title
+        class="form-control"
+        autofocus="on"
+      )
 
-    label(for="description") Description:
-    input(
-      type="text"
-      id="description"
-      name="description"
-      value=data.description
-    )
+    div.form-group
+      label(for="description") Description:
+      input(
+        type="text"
+        id="description"
+        name="description"
+        value=data.description
+        class="form-control"
+      )
 
-    input(type="submit" value="Submit")
+    input(type="submit" value="Submit" class="btn btn-success")

@@ -1,20 +1,26 @@
 var express = require('express');
-var router = express.Router();
-
+const mongoose = require('mongoose');
 const { check, validationResult } = require('express-validator');
+
+var router = express.Router();
+const Todo = mongoose.model('Todo');
 
 let todoList = [];
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express', todos: todoList });
+    Todo.find()
+        .then(todos => {
+            res.render('index', { title: 'Express', todos });
+        })
+        .catch(() => console.log('CANNOT FETCH TODOS FROM DB'));
 });
 
 router.post('/',
     [
-        check('todo')
+        check('title')
             .isLength({ min: 1 })
-            .withMessage('Please enter a title for todo'),
+            .withMessage('Please enter a title for todo')
         // check('todo')
         //     .isIn(todoList)
         //     .withMessage('Item already exists')
@@ -22,15 +28,34 @@ router.post('/',
     function(req, res, next) {
         const errors = validationResult(req);
 
+        Todo.find()
+            .then(todos => todoList = todos)
+            .catch(() => console.log('CANNOT FETCH TODOS FROM DB'));
+
         if (errors.isEmpty()) {
-            todoList.push(req.body.todo);
-            res.render('index', { title: 'Add Todo', todos: todoList, message: 'Todo added' })
+            console.log(req.body);
+            // todoList.push(req.body.todo);
+            // SAVE INTO DB
+            const todo = new Todo(req.body);
+            todo.save()
+                .then(() => {
+                    res.render('index', { title: 'Add Todo', todos: todoList, message: 'Todo added' })
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.render('index', {
+                        title: 'Add Todo',
+                        errors: err,
+                        data: req.body,
+                        todos: todoList
+                    });
+                })
         } else {
             res.render('index', {
                 title: 'Add Todo',
                 errors: errors.array(),
                 data: req.body,
-                todos: todoList
+                todos
             });
         }
 
